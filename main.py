@@ -9,7 +9,7 @@ from google.cloud import storage
 if TYPE_CHECKING:
     from datetime import datetime
 
-BASE_CONTENT_URL = "https://content.tfl.gov.uk/"
+BASE_CONTENT_URL = "http://content.tfl.gov.uk/"
 BUCKET_NAME = open("bucket_name.txt").read().strip()
 NAMES = [
     (
@@ -29,16 +29,14 @@ def _upload(url, filename, new_timestamp, raw_timestamp):
     # (we make another request because previously it was only a HEAD request to
     #  get the modification date)
     response = requests.get(url)
-    # needed so gzip/deflate can work from TfL's S3 bucket
-    response.raw.decode_content = True
 
     # upload the current version
     new_blob = bucket.blob(
         f"{filename}/{filename}-{new_timestamp:%Y-%m-%d-%H-%M-%S}.pdf"
     )
-    new_blob.metadata["timestamp"] = raw_timestamp
-    new_blob.upload_from_file(
-        response.raw, content_type=response.headers["Content-Type"]
+    new_blob.metadata = {"timestamp": raw_timestamp}
+    new_blob.upload_from_string(
+        response.content, content_type=response.headers["Content-Type"]
     )
     return new_blob
 
@@ -100,3 +98,11 @@ def tube_map_update_check(event, _):
             # no stored previous version of the map exists
             # upload the current version only
             _upload(url, filename, new_timestamp, raw_timestamp)
+
+
+if __name__ == '__main__':
+    import sys
+
+    tube_map_update_check({
+        "data": sys.argv[1]
+    }, None)
