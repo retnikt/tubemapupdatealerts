@@ -20,6 +20,7 @@ your project
 Storage Object Admin role to access it. Choose an appropriate region (do not use
 multi-region or dual-region), uniform access control, and the Standard storage
 class.
+8. [Allow][7] anyone to access files in the bucket
 8. Put the name of the bucket in `bucket_name.example.txt` and rename the file
 to `bucket_name.txt`
 9. Create a Pub/Sub topic in your project using `gcloud pubsub topics create
@@ -49,3 +50,4 @@ bucket.
 [4]: https://cloud.google.com/storage/docs/creating-buckets
 [5]: https://cloud.google.com/scheduler/docs/creating#creating_jobs
 [6]: http://man7.org/linux/man-pages/man5/crontab.5.html
+[7]: https://cloud.google.com/storage/docs/access-control/making-data-public#buckets
