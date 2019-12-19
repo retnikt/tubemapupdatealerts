@@ -85,7 +85,6 @@ def tube_map_update_check(event, _):
                 )
 
                 # announce with a tweet
-                # (including retarded
                 twitter_client.PostUpdate(
                     f"{name} changed at {raw_timestamp}! "
                     f"This version: {new_blob.media_link} ; "
